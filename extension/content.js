@@ -388,7 +388,7 @@
     if (isListingPage()) {
       document.getElementById("sab-scan-btn").addEventListener("click", handleAutoScan);
       document.querySelectorAll(".sab-cat-btn").forEach(btn => {
-        btn.addEventListener("click", () => handleCategoryClick(btn.dataset.cat, btn));
+        btn.addEventListener("click", () => handleCategoryClick(btn.dataset.kw, btn));
       });
       // keyword input ด้วยมือ — sync กับ currentKeyword
       const kwInput = document.getElementById("sab-kw-input");

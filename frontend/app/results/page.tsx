@@ -38,6 +38,7 @@ export default function ResultsPage() {
   const [minComm,    setMinComm]    = useState(0);
   const [minScore,   setMinScore]   = useState(0);
   const [minRating,  setMinRating]  = useState(0);
+  const [minSales,   setMinSales]   = useState(0);
   const [minPrice,   setMinPrice]   = useState(0);
   const [maxPrice,   setMaxPrice]   = useState(99999);
   const [exportCount, setExportCount] = useState<number | "">(50);
@@ -89,6 +90,7 @@ export default function ResultsPage() {
     if (p.commission_rate < minComm)   return false;
     if (item.score_6d.total < minScore) return false;
     if (p.rating < minRating)          return false;
+    if ((p.sales_volume ?? 0) < minSales) return false;
     if (p.price < minPrice)            return false;
     if (maxPrice < 99999 && p.price > maxPrice) return false;
     return true;
@@ -207,6 +209,7 @@ export default function ResultsPage() {
               <FilterInput label="คอมขั้นต่ำ (%)" value={minComm} onChange={setMinComm} min={0} max={50} step={1} />
               <FilterInput label="คะแนนขั้นต่ำ" value={minScore} onChange={setMinScore} min={0} max={100} step={5} />
               <FilterInput label="Rating ขั้นต่ำ" value={minRating} onChange={setMinRating} min={0} max={5} step={0.1} />
+              <FilterInput label="ยอดขายขั้นต่ำ" value={minSales} onChange={setMinSales} min={0} max={10000} step={10} />
               <FilterInput label="ราคาต่ำสุด (฿)" value={minPrice} onChange={setMinPrice} min={0} max={99999} step={10} />
               <FilterInput label="ราคาสูงสุด (฿)" value={maxPrice} onChange={v => setMaxPrice(v === 0 ? 99999 : v)} min={0} max={99999} step={10} placeholder="ไม่จำกัด" />
               <div className="flex flex-col gap-1">
@@ -227,7 +230,7 @@ export default function ResultsPage() {
               </div>
 
               <div className="col-span-full flex gap-2">
-                <button onClick={() => { setMinComm(0); setMinScore(0); setMinRating(0); setMinPrice(0); setMaxPrice(99999); setExportCount(50); }}
+                <button onClick={() => { setMinComm(0); setMinScore(0); setMinRating(0); setMinSales(0); setMinPrice(0); setMaxPrice(99999); setExportCount(50); }}
                   className="text-xs text-gray-500 underline hover:text-gray-700">
                   รีเซ็ตทั้งหมด
                 </button>
