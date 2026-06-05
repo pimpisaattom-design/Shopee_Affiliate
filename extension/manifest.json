@@ -1,0 +1,37 @@
+﻿{
+  "manifest_version": 3,
+  "name": "Shopee Affiliate Basket Manager",
+  "version": "1.0.0",
+  "description": "จัดตะกร้าสินค้า Shopee Affiliate — ดึงข้อมูลจาก API โดยตรง",
+  "permissions": [
+    "cookies",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://affiliate.shopee.co.th/*",
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://affiliate.shopee.co.th/*"],
+      "js": ["page-fetcher.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://affiliate.shopee.co.th/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle",
+      "world": "ISOLATED"
+    }
+  ]
+}

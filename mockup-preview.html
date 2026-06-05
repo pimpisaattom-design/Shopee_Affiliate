@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Preview — Shopee Affiliate Basket Manager</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-orange-50 font-sans">
+
+<!-- Header -->
+<header class="bg-white shadow-sm px-6 py-3 flex justify-between items-center sticky top-0 z-10">
+  <div class="flex items-center gap-2">
+    <span class="text-2xl">🛒</span>
+    <div>
+      <span class="font-bold text-gray-800">Shopee </span>
+      <span class="font-bold text-orange-500">Affiliate</span>
+      <span class="font-bold text-gray-800"> Basket</span>
+    </div>
+  </div>
+  <!-- ย้าย Affiliate ID มาอยู่มุมขวาบน -->
+  <button onclick="toggleAffiliate()" class="flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500 border border-gray-200 rounded-full px-3 py-1.5 hover:border-orange-300 transition">
+    ⚙️ <span id="af-label">ตั้งค่า Affiliate ID</span>
+  </button>
+</header>
+
+<!-- Affiliate ID Popup (ซ่อนอยู่ก่อน) -->
+<div id="af-popup" class="hidden fixed top-14 right-4 bg-white border border-orange-200 rounded-2xl shadow-xl p-4 w-72 z-50">
+  <p class="text-sm font-bold text-gray-700 mb-1">🔑 Shopee Affiliate ID</p>
+  <p class="text-xs text-gray-400 mb-3">ใส่เพื่อให้ลิงก์สินค้าเป็นลิงก์ Affiliate ของคุณ</p>
+  <input class="w-full border-2 border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400" placeholder="เช่น atom_creator_123" value="atom123">
+  <button class="mt-2 w-full bg-orange-500 text-white text-sm py-2 rounded-xl">บันทึก</button>
+</div>
+
+<!-- Main Layout: Form ซ้าย | Results ขวา -->
+<div class="flex h-[calc(100vh-56px)]">
+
+  <!-- LEFT: Form Panel -->
+  <div class="w-80 bg-white border-r overflow-y-auto flex-shrink-0 p-4 space-y-4">
+
+    <div>
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">เงื่อนไขสินค้า</p>
+    </div>
+
+    <!-- หมวดสินค้า -->
+    <div>
+      <p class="text-sm font-bold text-gray-700 mb-2"><span class="bg-orange-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-1">1</span> หมวดสินค้า</p>
+      <div class="grid grid-cols-3 gap-1.5">
+        <button class="py-2 px-1 rounded-xl border-2 border-orange-400 bg-orange-50 text-xs text-orange-600 font-medium">🏠 ของใช้<br>ในบ้าน</button>
+        <button class="py-2 px-1 rounded-xl border-2 border-gray-100 text-xs text-gray-500 hover:border-orange-200">🐾 สัตว์<br>เลี้ยง</button>
+        <button class="py-2 px-1 rounded-xl border-2 border-gray-100 text-xs text-gray-500 hover:border-orange-200">💄 ความ<br>งาม</button>
+        <button class="py-2 px-1 rounded-xl border-2 border-gray-100 text-xs text-gray-500 hover:border-orange-200">👶 แม่<br>เด็ก</button>
+        <button class="py-2 px-1 rounded-xl border-2 border-gray-100 text-xs text-gray-500 hover:border-orange-200">📱 มือถือ<br>อุปกรณ์</button>
+        <button class="py-2 px-1 rounded-xl border-2 border-gray-100 text-xs text-gray-500 hover:border-orange-200">🏋️ กีฬา</button>
+      </div>
+      <input class="mt-2 w-full border border-gray-200 rounded-xl px-3 py-1.5 text-xs" placeholder="พิมพ์เองเลย เช่น ออฟฟิศซินโดรม">
+    </div>
+
+    <!-- ราคา -->
+    <div>
+      <p class="text-sm font-bold text-gray-700 mb-2"><span class="bg-orange-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-1">2</span> ราคาไม่เกิน</p>
+      <div class="flex flex-wrap gap-1.5">
+        <button class="px-3 py-1 rounded-full text-xs border-2 border-gray-200 bg-white">200฿</button>
+        <button class="px-3 py-1 rounded-full text-xs border-2 border-orange-400 bg-orange-50 text-orange-600 font-medium">500฿</button>
+        <button class="px-3 py-1 rounded-full text-xs border-2 border-gray-200 bg-white">1,000฿</button>
+        <button class="px-3 py-1 rounded-full text-xs border-2 border-gray-200 bg-white">ไม่จำกัด</button>
+      </div>
+    </div>
+
+    <!-- คอมมิชชัน -->
+    <div>
+      <p class="text-sm font-bold text-gray-700 mb-2"><span class="bg-orange-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-1">3</span> คอมขั้นต่ำ</p>
+      <div class="grid grid-cols-4 gap-1">
+        <button class="py-2 rounded-xl border-2 border-gray-200 text-center text-xs">5%</button>
+        <button class="py-2 rounded-xl border-2 border-orange-400 bg-orange-50 text-orange-600 text-xs font-bold">10%</button>
+        <button class="relative py-2 rounded-xl border-2 border-gray-200 text-center text-xs">
+          <span class="absolute -top-1.5 -right-1 bg-orange-500 text-white text-[9px] px-1 rounded-full">ดี!</span>15%
+        </button>
+        <button class="py-2 rounded-xl border-2 border-gray-200 text-center text-xs">20%+</button>
+      </div>
+    </div>
+
+    <!-- แนวคอนเทนต์ — เพิ่มมากขึ้น -->
+    <div>
+      <p class="text-sm font-bold text-gray-700 mb-2"><span class="bg-orange-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-1">4</span> แนวคอนเทนต์</p>
+      <div class="grid grid-cols-2 gap-1.5">
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-orange-400 bg-orange-50 text-left">
+          <span>▶️</span><div><p class="text-xs font-bold text-orange-600">รีวิวก่อน-หลัง</p><p class="text-[10px] text-gray-400">Before/After</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-gray-100 text-left hover:border-orange-200">
+          <span>🎯</span><div><p class="text-xs font-semibold text-gray-700">แก้ปัญหา</p><p class="text-[10px] text-gray-400">Pain Point</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-gray-100 text-left hover:border-orange-200">
+          <span>📦</span><div><p class="text-xs font-semibold text-gray-700">Unboxing</p><p class="text-[10px] text-gray-400">เปิดกล่อง</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-gray-100 text-left hover:border-orange-200">
+          <span>🎵</span><div><p class="text-xs font-semibold text-gray-700">TikTok สั้น</p><p class="text-[10px] text-gray-400">15-30 วิ</p></div>
+        </button>
+        <!-- เพิ่มใหม่ -->
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-blue-200 bg-blue-50 text-left">
+          <span>⚖️</span><div><p class="text-xs font-semibold text-blue-600">เปรียบเทียบ</p><p class="text-[10px] text-gray-400">A vs B</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-blue-200 bg-blue-50 text-left">
+          <span>📚</span><div><p class="text-xs font-semibold text-blue-600">สอนใช้งาน</p><p class="text-[10px] text-gray-400">How-to</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-blue-200 bg-blue-50 text-left">
+          <span>☀️</span><div><p class="text-xs font-semibold text-blue-600">Day in Life</p><p class="text-[10px] text-gray-400">ชีวิตประจำวัน</p></div>
+        </button>
+        <button class="flex items-center gap-2 p-2 rounded-xl border-2 border-blue-200 bg-blue-50 text-left">
+          <span>📅</span><div><p class="text-xs font-semibold text-blue-600">ทดสอบ 30 วัน</p><p class="text-[10px] text-gray-400">Long-term</p></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- จำนวน -->
+    <div>
+      <p class="text-sm font-bold text-gray-700 mb-2"><span class="bg-orange-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center text-xs mr-1">5</span> จำนวนสินค้า</p>
+      <div class="grid grid-cols-3 gap-1.5">
+        <button class="py-3 rounded-xl border-2 border-gray-200 text-center"><p class="text-lg font-bold text-gray-700">10</p><p class="text-[10px] text-gray-400">ทดลองก่อน</p></button>
+        <button class="relative py-3 rounded-xl border-2 border-orange-400 bg-orange-50 text-center">
+          <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[9px] px-1.5 rounded-full">แนะนำ</span>
+          <p class="text-lg font-bold text-orange-500">20</p><p class="text-[10px] text-gray-400">แนะนำ</p>
+        </button>
+        <button class="py-3 rounded-xl border-2 border-gray-200 text-center"><p class="text-lg font-bold text-gray-700">50</p><p class="text-[10px] text-gray-400">ตะกร้าใหญ่</p></button>
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <button class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl text-sm">
+      🔍 หาสินค้าให้ฉัน →
+    </button>
+
+  </div>
+
+  <!-- RIGHT: Results Panel -->
+  <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+    <!-- Summary Bar -->
+    <div class="bg-orange-500 text-white rounded-2xl px-5 py-3 flex justify-around text-center">
+      <div><p class="text-xl font-bold">5</p><p class="text-xs opacity-80">สินค้าในตะกร้า</p></div>
+      <div><p class="text-xl font-bold">87</p><p class="text-xs opacity-80">คะแนนเฉลี่ย</p></div>
+      <div><p class="text-xl font-bold">5</p><p class="text-xs opacity-80">น่าทำ</p></div>
+    </div>
+
+    <!-- 🔥 สินค้าเทรนด์ตอนนี้ -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm">
+      <p class="font-bold text-gray-800 mb-3">🔥 สินค้ากำลังเทรนด์ตอนนี้</p>
+      <div class="flex gap-3 overflow-x-auto pb-2">
+
+        <div class="flex-shrink-0 w-40 border-2 border-orange-200 rounded-xl p-3 bg-orange-50">
+          <div class="relative">
+            <img src="https://picsum.photos/seed/T1/160/100" class="w-full h-20 object-cover rounded-lg">
+            <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">🔥 HOT</span>
+          </div>
+          <p class="text-xs font-semibold text-gray-800 mt-2 line-clamp-2">Stanley Quencher 40oz สีใหม่</p>
+          <p class="text-orange-500 text-xs font-bold mt-1">฿1,290</p>
+          <p class="text-[10px] text-gray-400">คอม 7.5% · ⭐ 4.9</p>
+        </div>
+
+        <div class="flex-shrink-0 w-40 border-2 border-orange-200 rounded-xl p-3 bg-orange-50">
+          <div class="relative">
+            <img src="https://picsum.photos/seed/T2/160/100" class="w-full h-20 object-cover rounded-lg">
+            <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">🔥 HOT</span>
+          </div>
+          <p class="text-xs font-semibold text-gray-800 mt-2 line-clamp-2">Resistance Band Set 5 เส้น</p>
+          <p class="text-orange-500 text-xs font-bold mt-1">฿249</p>
+          <p class="text-[10px] text-gray-400">คอม 20% · ⭐ 4.7</p>
+        </div>
+
+        <div class="flex-shrink-0 w-40 border-2 border-orange-200 rounded-xl p-3 bg-orange-50">
+          <div class="relative">
+            <img src="https://picsum.photos/seed/T3/160/100" class="w-full h-20 object-cover rounded-lg">
+            <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">🔥 HOT</span>
+          </div>
+          <p class="text-xs font-semibold text-gray-800 mt-2 line-clamp-2">แว่นกรองแสงสีฟ้า Anti Blue</p>
+          <p class="text-orange-500 text-xs font-bold mt-1">฿350</p>
+          <p class="text-[10px] text-gray-400">คอม 18% · ⭐ 4.6</p>
+        </div>
+
+        <div class="flex-shrink-0 w-40 border-2 border-orange-200 rounded-xl p-3 bg-orange-50">
+          <div class="relative">
+            <img src="https://picsum.photos/seed/T4/160/100" class="w-full h-20 object-cover rounded-lg">
+            <span class="absolute top-1 right-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">📈 ขายดี</span>
+          </div>
+          <p class="text-xs font-semibold text-gray-800 mt-2 line-clamp-2">น้ำมันนวด Peppermint ลดปวด</p>
+          <p class="text-orange-500 text-xs font-bold mt-1">฿199</p>
+          <p class="text-[10px] text-gray-400">คอม 22% · ⭐ 4.7</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ตะกร้าของคุณ -->
+    <p class="font-bold text-gray-700 px-1">ตะกร้าที่ระบบคัดมาให้</p>
+
+    <!-- Product Card 1 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div class="p-4">
+        <div class="flex gap-3">
+          <div class="relative">
+            <img src="https://picsum.photos/seed/P043/64/64" class="w-16 h-16 rounded-xl object-cover">
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 py-0.5 rounded-full">🔥</span>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="text-sm font-semibold text-gray-800">ฟิล์มกระจก Samsung Galaxy S24 9H</p>
+              <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">ดึงคนเข้า</span>
+            </div>
+            <p class="text-xs text-gray-400">GlassShield · มือถืออุปกรณ์</p>
+            <div class="flex gap-3 mt-1">
+              <span class="text-orange-500 font-bold text-sm">฿129</span>
+              <span class="text-xs text-gray-500">คอม 22%</span>
+              <span class="text-xs text-gray-500">⭐ 4.5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 flex items-center gap-3">
+          <span class="text-2xl font-bold text-green-600">87.3</span>
+          <div class="flex-1">
+            <div class="h-2 bg-gray-100 rounded-full"><div class="h-full bg-green-500 rounded-full" style="width:87.3%"></div></div>
+            <p class="text-xs text-gray-400 mt-0.5">คะแนนน่าทำ</p>
+          </div>
+        </div>
+
+        <div class="mt-2 p-2.5 bg-green-50 rounded-xl text-xs text-green-700">
+          ✅ สินค้านี้น่าทำ เพราะ คอมสูงมาก (22%) ทำเงินได้ดีต่อคลิป และรีวิวดี (4.5⭐)
+        </div>
+
+        <div class="mt-3 grid grid-cols-3 gap-2 text-center">
+          <div><p class="text-[10px] text-gray-400">💰 ขายง่าย</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:94%"></div></div><p class="text-xs font-bold text-gray-700">94</p></div>
+          <div><p class="text-[10px] text-gray-400">💎 คอมดี</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:100%"></div></div><p class="text-xs font-bold text-gray-700">100</p></div>
+          <div><p class="text-[10px] text-gray-400">🎬 ทำคอนเทนต์</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:72%"></div></div><p class="text-xs font-bold text-gray-700">72</p></div>
+          <div><p class="text-[10px] text-gray-400">⚡ เข้าใจเร็ว</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:100%"></div></div><p class="text-xs font-bold text-gray-700">100</p></div>
+          <div><p class="text-[10px] text-gray-400">🛡️ ความเสี่ยง</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:93%"></div></div><p class="text-xs font-bold text-gray-700">93</p></div>
+          <div><p class="text-[10px] text-gray-400">🎯 คู่แข่ง</p><div class="h-1.5 bg-gray-100 rounded-full mt-1"><div class="h-full bg-orange-400 rounded-full" style="width:52%"></div></div><p class="text-xs font-bold text-gray-700">52</p></div>
+        </div>
+      </div>
+
+      <!-- Content Ideas Toggle -->
+      <button onclick="toggleContent('c1')" class="w-full px-4 py-2.5 border-t flex justify-between items-center text-sm text-orange-600 font-medium hover:bg-orange-50">
+        <span>💡 ไอเดียคอนเทนต์ (รีวิวก่อน-หลัง)</span>
+        <span>▼ ดู</span>
+      </button>
+      <div id="c1" class="hidden px-4 pb-4 bg-orange-50 space-y-2">
+        <div class="bg-white rounded-xl p-3">
+          <div class="flex justify-between"><p class="text-xs font-bold text-gray-600">🎬 Hook เปิดคลิป</p><button class="text-xs text-orange-500">คัดลอก</button></div>
+          <p class="text-xs text-gray-700 mt-1">ก่อนจะบอกว่าดี ขอโชว์ผลจริงก่อนเลย...</p>
+        </div>
+        <div class="bg-white rounded-xl p-3">
+          <div class="flex justify-between"><p class="text-xs font-bold text-gray-600">📝 Script</p><button class="text-xs text-orange-500">คัดลอก</button></div>
+          <p class="text-xs text-gray-700 mt-1">เปิดด้วย Pain Point → โชว์ Before → ใช้สินค้า → โชว์ After → บอกราคา + ลิงก์</p>
+        </div>
+        <div class="bg-white rounded-xl p-3">
+          <div class="flex justify-between"><p class="text-xs font-bold text-gray-600">✍️ Caption</p><button class="text-xs text-orange-500">คัดลอก</button></div>
+          <p class="text-xs text-gray-700 mt-1">เจอแล้ว! ฟิล์มกระจก Samsung Galaxy S24 ราคาแค่ ฿129 🔥<br>✅ ใครมีปัญหาแบบนี้อยู่ ลองดูก่อนนะ<br>#มือถืออุปกรณ์ #แอฟฟิลิเอท #รีวิว</p>
+        </div>
+        <a href="#" class="block w-full text-center bg-orange-500 text-white text-sm py-2 rounded-xl font-medium">🛍 เปิดลิงก์ Shopee</a>
+      </div>
+    </div>
+
+    <!-- Product Card 2 (ย่อ) -->
+    <div class="bg-white rounded-2xl shadow-sm p-4">
+      <div class="flex gap-3">
+        <img src="https://picsum.photos/seed/P041/64/64" class="w-16 h-16 rounded-xl object-cover">
+        <div class="flex-1">
+          <div class="flex justify-between">
+            <p class="text-sm font-semibold text-gray-800">เคสโทรศัพท์ iPhone 15 กันกระแทก</p>
+            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">คอมดี</span>
+          </div>
+          <p class="text-xs text-gray-400">CaseMax · มือถืออุปกรณ์</p>
+          <div class="flex gap-3 mt-1">
+            <span class="text-orange-500 font-bold text-sm">฿199</span>
+            <span class="text-xs text-gray-500">คอม 20%</span>
+            <span class="text-xs text-gray-500">⭐ 4.6</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 flex items-center gap-3">
+        <span class="text-2xl font-bold text-green-600">86.3</span>
+        <div class="flex-1"><div class="h-2 bg-gray-100 rounded-full"><div class="h-full bg-green-500 rounded-full" style="width:86%"></div></div></div>
+      </div>
+      <div class="mt-2 p-2.5 bg-green-50 rounded-xl text-xs text-green-700">✅ สินค้านี้น่าทำ เพราะ คอมดี (20%) และราคาไม่สูง (฿199)</div>
+      <button class="mt-3 w-full py-2 border-t text-sm text-orange-600 font-medium">💡 ไอเดียคอนเทนต์ ▼</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bottom Export Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t px-4 py-3 flex gap-2 shadow-lg">
+  <button class="flex-1 bg-orange-500 text-white text-sm font-bold py-3 rounded-xl">📋 Copy Caption ทั้งหมด</button>
+  <button class="px-4 bg-green-500 text-white text-sm font-bold py-3 rounded-xl">⬇ Excel</button>
+  <button class="px-4 bg-gray-100 text-gray-600 text-sm py-3 rounded-xl">🔄 ล้าง</button>
+</div>
+
+<script>
+function toggleAffiliate() {
+  document.getElementById('af-popup').classList.toggle('hidden');
+}
+function toggleContent(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('hidden');
+}
+</script>
+</body>
+</html>

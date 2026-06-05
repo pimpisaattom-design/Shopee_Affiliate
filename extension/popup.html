@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopee Affiliate Basket</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 320px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #FFF9F5; }
+
+  .header { background: #FF6B00; color: white; padding: 14px 16px; }
+  .header h1 { font-size: 15px; font-weight: bold; }
+  .header p  { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+
+  .stats { display: flex; background: white; border-bottom: 1px solid #F0F0F0; }
+  .stat  { flex: 1; text-align: center; padding: 10px; }
+  .stat-num  { font-size: 20px; font-weight: bold; color: #FF6B00; }
+  .stat-label { font-size: 10px; color: #999; }
+
+  .section { padding: 12px 16px; }
+  .section-title { font-size: 11px; font-weight: bold; color: #999; text-transform: uppercase; margin-bottom: 8px; }
+
+  .af-row { display: flex; gap: 6px; }
+  input {
+    flex: 1; border: 1.5px solid #E0E0E0; border-radius: 8px;
+    padding: 7px 10px; font-size: 12px;
+  }
+  input:focus { outline: none; border-color: #FF6B00; }
+
+  .btn { border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+  .btn-orange { background: #FF6B00; color: white; }
+  .btn-orange:hover { background: #e55f00; }
+  .btn-green  { background: #2E7D32; color: white; }
+  .btn-green:hover { background: #1B5E20; }
+  .btn-gray   { background: #F5F5F5; color: #555; }
+  .btn-gray:hover { background: #EEEEEE; }
+  .btn-full   { width: 100%; padding: 10px; }
+
+  .items { max-height: 200px; overflow-y: auto; }
+  .item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px; border-radius: 8px; margin-bottom: 4px; background: white;
+  }
+  .item img { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
+  .item-name { font-size: 11px; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+  .item-meta { font-size: 10px; color: #FF6B00; font-weight: bold; }
+  .item-remove { margin-left: auto; background: none; border: none; cursor: pointer; color: #ccc; font-size: 13px; }
+  .item-remove:hover { color: #f44336; }
+
+  .empty { text-align: center; padding: 20px; color: #bbb; font-size: 12px; }
+
+  .divider { height: 1px; background: #F0F0F0; margin: 0 16px; }
+
+  .actions { padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+
+  .status { font-size: 11px; color: #666; text-align: center; padding: 6px; }
+  .status.success { color: #2E7D32; }
+  .status.error   { color: #C62828; }
+
+  .tip { background: #FFF3E0; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #E65100; margin: 0 16px 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛒 Shopee Affiliate Basket</h1>
+  <p>เปิดหน้าสินค้า → กดเพิ่ม → ส่งไปวิเคราะห์</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num" id="count">0</div>
+    <div class="stat-label">สินค้าในตะกร้า</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="avg-com">—</div>
+    <div class="stat-label">คอมเฉลี่ย %</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="avg-price">—</div>
+    <div class="stat-label">ราคาเฉลี่ย ฿</div>
+  </div>
+</div>
+
+<!-- Affiliate ID -->
+<div class="section">
+  <div class="section-title">Shopee Affiliate ID ของคุณ</div>
+  <div class="af-row">
+    <input type="text" id="af-id" placeholder="เช่น atom_creator_123" />
+    <button class="btn btn-orange" id="save-af">บันทึก</button>
+  </div>
+  <div class="status" id="af-status"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Items list -->
+<div class="section">
+  <div class="section-title">สินค้าที่เก็บไว้</div>
+  <div class="items" id="items">
+    <div class="empty">ยังไม่มีสินค้า<br>เปิดหน้าสินค้า Shopee แล้วกดปุ่ม 🛒 ที่ขวามือ</div>
+  </div>
+</div>
+
+<div class="tip" id="tip" style="display:none">
+  💡 วิธีใช้: เปิดหน้าสินค้าที่ affiliate.shopee.co.th แล้วกดปุ่ม 🛒 ที่ขวาหน้าจอ
+</div>
+
+<div class="actions">
+  <button class="btn btn-orange btn-full" id="send-btn">⚡ ส่งไปวิเคราะห์ที่แอปหลัก</button>
+  <div style="display:flex; gap:6px">
+    <button class="btn btn-green" style="flex:1" id="open-app">📊 เปิดแอปหลัก</button>
+    <button class="btn btn-gray" style="flex:1" id="clear-btn">🗑 ล้างตะกร้า</button>
+  </div>
+  <div class="status" id="send-status"></div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
