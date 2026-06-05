@@ -2,7 +2,7 @@
   if (window.__sabLoaded) return;
   window.__sabLoaded = true;
 
-  const API = "http://127.0.0.1:8000";
+  const API = "https://shopeeaffiliate-production-c3ea.up.railway.app";
   let basket = [];
   let panelOpen = false;
   let scanning = false;

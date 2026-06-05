@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+const API = process.env.NEXT_PUBLIC_API_URL ?? "https://shopeeaffiliate-production-c3ea.up.railway.app";
 
 type Dims = Record<string, number>;
 type Score6D = { dimensions: Dims; total: number };
