@@ -43,6 +43,12 @@ export default function ResultsPage() {
   const [maxPrice,   setMaxPrice]   = useState(99999);
   const [exportCount, setExportCount] = useState<number | "">(50);
   const [showFilters, setShowFilters] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const toggleSelect = (id: string) =>
+    setSelected(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
+  const toggleSelectAll = () =>
+    setSelected(prev => prev.size === displayed.length ? new Set() : new Set(displayed.map(i => i.product.id)));
 
   useEffect(() => {
     async function loadData() {
@@ -106,11 +112,13 @@ export default function ResultsPage() {
   const limit = exportCount === "" ? sorted.length : Math.min(Number(exportCount), sorted.length);
   const displayed = sorted.slice(0, limit);
 
+  const exportList = selected.size > 0 ? displayed.filter(i => selected.has(i.product.id)) : displayed;
+
   async function handleExport() {
-    if (displayed.length === 0) return;
+    if (exportList.length === 0) return;
     setExporting(true);
     try {
-      const items = displayed.map((item) => ({
+      const items = exportList.map((item) => ({
         name: item.product.name,
         category: item.product.category,
         price: item.product.price,
@@ -239,20 +247,25 @@ export default function ResultsPage() {
           )}
         </div>
 
-        {/* Toolbar: Sort + Export */}
+        {/* Toolbar: Sort + Select All + Export */}
         <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
-          <div className="flex gap-2 text-sm">
+          <div className="flex gap-2 text-sm flex-wrap items-center">
             <span className="text-gray-400 self-center">เรียงตาม:</span>
             <SortBtn active={sortKey === "score"} onClick={() => setSortKey("score")}>คะแนน</SortBtn>
             <SortBtn active={sortKey === "commission"} onClick={() => setSortKey("commission")}>คอมสูง</SortBtn>
             <SortBtn active={sortKey === "price"} onClick={() => setSortKey("price")}>ราคา</SortBtn>
+            <button onClick={toggleSelectAll}
+              className="px-3 py-1.5 rounded-lg border text-sm transition bg-white text-gray-600 border-gray-200 hover:border-orange-300">
+              {selected.size === displayed.length && displayed.length > 0 ? "✅ เลิกเลือกทั้งหมด" : "☐ เลือกทั้งหมด"}
+            </button>
+            {selected.size > 0 && <span className="text-xs text-orange-500 font-medium">เลือกแล้ว {selected.size} ชิ้น</span>}
           </div>
           <button
             onClick={handleExport}
             disabled={exporting}
             className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg flex items-center gap-1.5 disabled:opacity-60"
           >
-            {exporting ? "⏳ กำลังสร้างไฟล์..." : `📥 Export ${limit} ชิ้น`}
+            {exporting ? "⏳ กำลังสร้างไฟล์..." : `📥 Export ${exportList.length} ชิ้น${selected.size > 0 ? " (ที่เลือก)" : ""}`}
           </button>
         </div>
 
@@ -262,12 +275,18 @@ export default function ResultsPage() {
             const p = item.product;
             const isOpen = expanded === p.id;
             const scoreColor = item.score_6d.total >= 70 ? "text-green-600 bg-green-500" : item.score_6d.total >= 55 ? "text-yellow-600 bg-yellow-500" : "text-gray-400 bg-gray-400";
+            const isSelected = selected.has(p.id);
             return (
-              <div key={p.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col">
+              <div key={p.id} onClick={() => toggleSelect(p.id)}
+                className={`bg-white rounded-2xl border-2 overflow-hidden hover:shadow-md transition flex flex-col cursor-pointer ${isSelected ? "border-orange-400 shadow-md" : "border-gray-100"}`}>
 
                 {/* Image */}
                 <div className="relative h-32 bg-gray-50">
                   <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  {/* Checkbox */}
+                  <div className={`absolute top-2 left-2 w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition ${isSelected ? "bg-orange-500 border-orange-500 text-white" : "bg-white border-gray-300"}`}>
+                    {isSelected ? "✓" : ""}
+                  </div>
                   <span className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full font-medium ${ROLE_COLOR[item.role] || "bg-gray-100 text-gray-600"}`}>
                     {item.role}
                   </span>
@@ -297,7 +316,7 @@ export default function ResultsPage() {
                   </p>
 
                   <button
-                    onClick={() => setExpanded(isOpen ? null : p.id)}
+                    onClick={(e) => { e.stopPropagation(); setExpanded(isOpen ? null : p.id); }}
                     className="mt-3 w-full text-xs font-medium text-orange-600 border border-orange-200 rounded-lg py-2 hover:bg-orange-50 transition"
                   >
                     {isOpen ? "▲ ซ่อนคอนเทนต์" : "💡 ดูไอเดียคอนเทนต์"}
@@ -330,7 +349,9 @@ export default function ResultsPage() {
       {/* Fixed Bottom Export Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t px-5 py-3 shadow-lg">
         <div className="max-w-6xl mx-auto flex gap-3 items-center">
-          <span className="text-sm text-gray-500 hidden sm:block">{filtered.length} ชิ้น (กรองแล้ว) · export {limit} ชิ้น</span>
+          <span className="text-sm text-gray-500 hidden sm:block">
+            {filtered.length} ชิ้น (กรองแล้ว){selected.size > 0 ? ` · เลือกแล้ว ${selected.size} ชิ้น` : ` · export ${exportList.length} ชิ้น`}
+          </span>
           <div className="flex-1" />
           <button
             onClick={() => copyText(displayed.map((item, i) => `${i + 1}. ${item.product.name}\n${item.content_ideas.caption}\n${item.affiliate_url}`).join("\n\n"), "all")}
@@ -343,7 +364,7 @@ export default function ResultsPage() {
             disabled={exporting}
             className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition disabled:opacity-60"
           >
-            {exporting ? "⏳ กำลังสร้าง..." : `📥 Export ${limit} ชิ้น`}
+            {exporting ? "⏳ กำลังสร้าง..." : `📥 Export ${exportList.length} ชิ้น${selected.size > 0 ? " (ที่เลือก)" : ""}`}
           </button>
         </div>
       </div>
