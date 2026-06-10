@@ -64,8 +64,11 @@
     // ยอดขาย
     const sold = Number(card.sold ?? card.historical_sold ?? 0);
 
-    // affiliate link (long_link มี utm แล้ว), product_link เป็น URL ปกติ
-    const affiliateUrl = raw.long_link ?? raw.product_link ?? location.href;
+    // affiliate link — สร้าง URL แบบ affiliate portal ถ้ามี offer_id
+    const offerId = raw.offer_id ?? raw.id ?? null;
+    const affiliateUrl = offerId
+      ? `https://affiliate.shopee.co.th/offer/product_offer/${offerId}`
+      : (raw.long_link ?? raw.product_link ?? location.href);
 
     // shop flags
     const isMall        = !!card.is_official_shop || !!card.shopee_verified;
@@ -496,7 +499,7 @@
       result.textContent = `🎉 วิเคราะห์แล้ว ${data.total ?? filtered.length} ชิ้น! กำลังเปิดแอป...`;
       refreshCount();
       refreshItems();
-      setTimeout(() => window.open("http://localhost:3000/results", "_blank"), 1200);
+      setTimeout(() => window.open("http://shopee-affiliate-self.vercel.app/results", "_blank"), 1200);
     } catch (e) {
       // แสดง error จริงเพื่อ debug
       result.innerHTML = `❌ ส่งไป Backend ไม่ได้: <b>${e.message}</b>`;
@@ -568,7 +571,7 @@
       await chrome.storage.local.set({ extension_basket: data.basket || [] });
       showToast("✅ ส่งแล้ว! เปิดแอปดูได้เลย", "success");
       btn.textContent = "✅ ส่งแล้ว";
-      setTimeout(() => window.open("http://localhost:3000/results", "_blank"), 1000);
+      setTimeout(() => window.open("http://shopee-affiliate-self.vercel.app/results", "_blank"), 1000);
     } catch {
       showToast("❌ เชื่อมต่อแอปไม่ได้", "error");
       btn.disabled = false; btn.textContent = "⚡ ส่งไปวิเคราะห์ที่แอป";
