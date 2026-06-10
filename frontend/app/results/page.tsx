@@ -205,7 +205,7 @@ export default function ResultsPage() {
           </button>
 
           {showFilters && (
-            <div className="px-4 pb-4 grid grid-cols-2 sm:grid-cols-3 gap-3 border-t border-gray-50 pt-3">
+            <div className="px-4 pb-4 grid grid-cols-3 gap-3 border-t border-gray-50 pt-3">
               <FilterInput label="คอมขั้นต่ำ (%)" value={minComm} onChange={setMinComm} min={0} max={50} step={1} />
               <FilterInput label="คะแนนขั้นต่ำ" value={minScore} onChange={setMinScore} min={0} max={100} step={5} />
               <FilterInput label="Rating ขั้นต่ำ" value={minRating} onChange={setMinRating} min={0} max={5} step={0.1} />
