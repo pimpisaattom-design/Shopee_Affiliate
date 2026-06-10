@@ -6,6 +6,7 @@ from typing import List, Optional
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.hyperlink import Hyperlink
 
 router = APIRouter(prefix="/api/export", tags=["export"])
 
@@ -100,7 +101,7 @@ def export_excel(body: ExportRequest):
             item.script,
             item.caption,
             item.hashtags,
-            item.affiliate_url,
+            "🛍 เปิดลิงก์ Shopee",
         ]
 
         for col, val in enumerate(values, 1):
@@ -117,9 +118,11 @@ def export_excel(body: ExportRequest):
                 color = "1B5E20" if item.score >= 70 else ("E65100" if item.score >= 55 else "757575")
                 cell.font = Font(size=11, bold=True, color=color)
 
-            # ลิงก์ Affiliate เป็นสีน้ำเงิน
+            # ลิงก์ Affiliate — แสดงเป็น Hyperlink คลิกได้ ไม่โชว์ URL ยาว
             if col == 13:
+                cell.hyperlink = item.affiliate_url
                 cell.font = Font(size=9, color="1565C0", underline="single")
+                cell.alignment = Alignment(vertical="top", horizontal="center")
 
         ws.row_dimensions[row].height = 80
 
