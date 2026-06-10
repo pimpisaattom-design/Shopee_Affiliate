@@ -64,11 +64,8 @@
     // ยอดขาย
     const sold = Number(card.sold ?? card.historical_sold ?? 0);
 
-    // affiliate link — สร้าง URL แบบ affiliate portal ถ้ามี offer_id
-    const offerId = raw.offer_id ?? raw.id ?? null;
-    const affiliateUrl = offerId
-      ? `https://affiliate.shopee.co.th/offer/product_offer/${offerId}`
-      : (raw.long_link ?? raw.product_link ?? location.href);
+    // affiliate link — ใช้ product_link (สั้น สะอาด) แทน long_link ที่มี utm ยาว
+    const affiliateUrl = raw.product_link ?? raw.long_link ?? location.href;
 
     // shop flags
     const isMall        = !!card.is_official_shop || !!card.shopee_verified;
