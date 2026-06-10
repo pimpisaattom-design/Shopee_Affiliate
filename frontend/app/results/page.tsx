@@ -7,7 +7,7 @@ type Dims = Record<string, number>;
 type Score6D = { dimensions: Dims; total: number };
 type Explanation = { recommend: boolean; good_reasons: string[]; bad_reasons: string[]; summary: string };
 type ContentIdeas = { hook: string; pov: string; script: string; camera_angle: string; selling_line: string; caption: string; hashtags: string[] };
-type Product = { id: string; name: string; category: string; price: number; commission_rate: number; rating: number; image_url: string; brand: string };
+type Product = { id: string; name: string; category: string; price: number; commission_rate: number; rating: number; sales_volume?: number; image_url: string; brand: string };
 type BasketItem = { product: Product; role: string; score_6d: Score6D; explanation: Explanation; content_ideas: ContentIdeas; affiliate_url: string };
 
 const ROLE_COLOR: Record<string, string> = {
@@ -280,6 +280,7 @@ export default function ResultsPage() {
                     <span className="text-orange-500 font-bold text-sm">฿{p.price.toLocaleString()}</span>
                     <span className="text-xs text-gray-500">คอม {p.commission_rate}%</span>
                     <span className="text-xs text-gray-400">⭐{p.rating}</span>
+                    {p.sales_volume != null && <span className="text-xs text-gray-400">🛒{p.sales_volume.toLocaleString()}</span>}
                   </div>
 
                   {/* Score bar */}
